@@ -53,5 +53,6 @@ while vidcap.isOpened():
         continue
     i += 1
 
+os.system("clear")
 vidcap.release()
 cv2.destroyAllWindows()
