@@ -42,13 +42,13 @@ def print_from_image(filename):
 
 vidcap = cv2.VideoCapture(infile)
 i = 0
-frame_skip = 1
+frame_skip = 0
 while vidcap.isOpened():
     success, image = vidcap.read()
     if not success:
         break
     if i > frame_skip - 1:
-        image = cv2.convertScaleAbs(image, alpha=1.5, beta=70)
+        image = cv2.convertScaleAbs(image, alpha=1.5, beta=60)
         cv2.imwrite("frame.jpg", image)
         i = 0
         print("\033[48;2;0;0;0m", end='')
