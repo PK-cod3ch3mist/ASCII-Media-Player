@@ -11,7 +11,7 @@ These packages can be installed using any package manager for python like pip, c
 
 ## A Demo
 Below is a GIF file (of lesser quality than the original screen-capture) showing the output on a true-color terminal
-![Gif]()
+![Gif](https://github.com/PK-cod3ch3mist/ANSIArtGenerator/blob/main/demo.gif)
 
 ## Usage
 Navigate to the directory of the python script and run the following command
