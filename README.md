@@ -9,6 +9,10 @@ The following python packages are used in the program:
 - numpy
 These packages can be installed using any package manager for python like pip, conda, etc.
 
+## A Demo
+Below is a GIF file (of lesser quality than the original screen-capture) showing the output on a true-color terminal
+![Gif]()
+
 ## Usage
 Navigate to the directory of the python script and run the following command
 ```shell

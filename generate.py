@@ -147,7 +147,7 @@ def read_media(infile, option):
         if i > frame_skip - 1:
             # enhance the image for terminal display
             if option == 1:
-                image = cv2.convertScaleAbs(image, alpha=1.5, beta=60)
+                image = cv2.convertScaleAbs(image, alpha=1.25, beta=50)
             cv2.imwrite("frame.jpg", image)
             i = 0
             print_from_image("frame.jpg", option)
@@ -157,5 +157,5 @@ def read_media(infile, option):
     cv2.destroyAllWindows()
 
 infile = sys.argv[1]
-colored_output = sys.argv[2]
+colored_output = int(sys.argv[2])
 read_media(infile, colored_output)
