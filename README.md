@@ -23,7 +23,7 @@ If your video appears glitchy, you can try changing the `frame_skip` variable to
 Again you can change the values of the `d2` (height) and `d1` (width) variables according to the terminal *(Currently they are set to a full-screen terminal on a 13-inch laptop)*. I am working on a system that can automatically get your terminal size and work accordingly.
 
 ## TODO
-[] Support 3-bit RGB (8-colors) with dithering
-[x] Support true color (24-bit RGB)
-[] Support automatic resizing
-[x] Support B&W output
+- [] Support 3-bit RGB (8-colors) with dithering
+- [x] Support true color (24-bit RGB)
+- [] Support automatic resizing
+- [x] Support B&W output
