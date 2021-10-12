@@ -7,6 +7,7 @@ The following python packages are used in the program:
 - opencv-python
 - Pillow
 - numpy
+
 These packages can be installed using any package manager for python like pip, conda, etc.
 
 ## A Demo
