@@ -26,6 +26,7 @@ def set_brightness(pixel, option):
     return brightness
 
 def print_matrix(ascii_matrix):
+    print("\033[1;1H", end='')
     for line in ascii_matrix:
         line_extended = [p + p + p for p in line]
         print("".join(line_extended))
@@ -85,8 +86,9 @@ def print_from_image(filename, option):
             # TODO: make this dynamic to set according to terminals current size
             ac_row, ac_col = im.size
             # d1 and d2 are the width and height of image resp
-            d2 = 36
-            d1 = min(52, int((ac_row * d2) / ac_col))
+            size = os.get_terminal_size()
+            d2 = size.lines - 1
+            d1 = min(int(size.columns / 3), int((ac_row * d2) / ac_col))
 
             # set image to determined d1 and column size
             small_im = im.resize((d1, d2))
@@ -139,6 +141,7 @@ def read_media(infile, option):
     i = 0
     # control frame rate in image
     frame_skip = 0
+    os.system("clear")
     while vidcap.isOpened():
         # read frames from the image
         success, image = vidcap.read()
