@@ -87,7 +87,7 @@ def print_from_image(filename, option):
             ac_row, ac_col = im.size
             # d1 and d2 are the width and height of image resp
             size = os.get_terminal_size()
-            d2 = size.lines - 1
+            d2 = min(size.lines - 1, int((ac_col * size.columns) / ac_row))
             d1 = min(int(size.columns / 3), int((ac_row * d2) / ac_col))
 
             # set image to determined d1 and column size
