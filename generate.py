@@ -22,7 +22,7 @@ def set_brightness(pixel, option):
         brightness = (max(r, g, b) + min(r, g, b)) / 2
     elif option == 3:
         # luminance being square root of weighted RGB values (weighted according to the perception of the human eye)
-        brightness = (0.299 * r * r + 0.587 * g * g + 0.114 * b * b) ** 0.5
+        brightness = (0.299 * r + 0.587 * g + 0.114 * b)
     return brightness
 
 def print_matrix(ascii_matrix):
