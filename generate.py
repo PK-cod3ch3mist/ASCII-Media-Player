@@ -118,8 +118,8 @@ def read_media(infile, option):
         if i > frame_skip - 1:
             # enhance the image (increase contrast and brightness) for terminal display
             # TURN OFF (by commenting) IF YOU PREFER THE ORIGINAL COLOURS
-            if option == 1:
-                image = cv2.convertScaleAbs(image, alpha=1.25, beta=50)
+            # if option == 1:
+            #     image = cv2.convertScaleAbs(image, alpha=1.25, beta=50)
             cv2.imwrite("frame.jpg", image)
             i = 0
             print_from_image("frame.jpg", option)
