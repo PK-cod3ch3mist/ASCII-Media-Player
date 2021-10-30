@@ -3,9 +3,31 @@ from PIL import Image
 import numpy as np
 import os
 import cv2
+import threading
 
 ASCII_CHARS = "`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
 MAX_PIXEL_VALUE = 255
+
+def thread_func(st_matrix, st, ed, option):
+    pixels = [st_matrix[i][:] for i in range (st, ed)]
+    intensity_matrix = get_intensity_matrix(pixels, 3)
+    intensity_matrix = normalize_intensity_matrix(intensity_matrix)
+    color_matrix = get_color_matrix(pixels)
+
+    ascii_matrix = []
+    for i in range(len(intensity_matrix)):
+        ascii_row = []
+        for j in range(len(intensity_matrix[0])):
+            intensity = intensity_matrix[i][j]
+            symbol_index = int(intensity / MAX_PIXEL_VALUE * len(ASCII_CHARS)) - 1
+            symbol_index = symbol_index + 1 if symbol_index < 0 else symbol_index
+            if option == 1:
+                color = color_matrix[i][j]
+                ascii_row.append(color)
+            ascii_row.append(ASCII_CHARS[symbol_index])
+        ascii_matrix.append(ascii_row)
+
+    print_matrix(ascii_matrix, st)
 
 def get_pixel_matrix(image):
     image = image.convert("RGB")
@@ -22,11 +44,13 @@ def get_pixel_matrix(image):
     pixels = list(im.getdata())
     return [pixels[i:i+im.width] for i in range(0, len(pixels), im.width)]
 
-def print_matrix(ascii_matrix):
-    print("\033[1;1H", end='')
+def print_matrix(ascii_matrix, st):
+    count = 1
     for line in ascii_matrix:
         line_extended = [p + p + p for p in line]
+        print("\033[" + str(st + count)+ ";1H", end='')
         print("".join(line_extended))
+        count += 1
 
 def get_color_matrix(pixels):
     color_matrix = []
@@ -73,7 +97,7 @@ def normalize_intensity_matrix(intensity_matrix):
 
     return normalized_intensity_matrix
 
-def print_from_image(filename, option):
+def print_from_image(filename, option, thrd):
     """Taking in an image, use its RGB values to decide upon an ASCII character
     to represent it. This ASCII character will be based upon the brightness
     measure calculated
@@ -81,30 +105,38 @@ def print_from_image(filename, option):
     try:
         with Image.open(filename) as image:
             pixels = get_pixel_matrix(image)
-            intensity_matrix = get_intensity_matrix(pixels, 3)
-            intensity_matrix = normalize_intensity_matrix(intensity_matrix)
-            color_matrix = get_color_matrix(pixels)
-
-            ascii_matrix = []
-            for i in range(len(intensity_matrix)):
-                ascii_row = []
-                for j in range(len(intensity_matrix[0])):
-                    intensity = intensity_matrix[i][j]
-                    symbol_index = int(intensity / MAX_PIXEL_VALUE * len(ASCII_CHARS)) - 1
-                    symbol_index = symbol_index + 1 if symbol_index < 0 else symbol_index
-                    if option == 1:
-                        color = color_matrix[i][j]
-                        ascii_row.append(color)
-                    ascii_row.append(ASCII_CHARS[symbol_index])
-                ascii_matrix.append(ascii_row)
 
             print("\033[40m\033[37m", end='')
-            print_matrix(ascii_matrix)
+
+            if thrd == 1:
+                t1 = threading.Thread(target=thread_func, args=(pixels, 0, int(len(pixels) / 5), option))
+                t2 = threading.Thread(target=thread_func, args=(pixels, int(len(pixels) / 5), int((len(pixels) / 5) * 2), option))
+                t3 = threading.Thread(target=thread_func, args=(pixels, int((len(pixels) / 5) * 2), int((len(pixels) / 3) * 3), option))
+                t4 = threading.Thread(target=thread_func, args=(pixels, int((len(pixels) / 5) * 3), int((len(pixels) / 5) * 4), option))
+                t5 = threading.Thread(target=thread_func, args=(pixels, int((len(pixels) / 5) * 4), int(len(pixels)), option))
+
+                t1.start()
+                t2.start()
+                t3.start()
+                t4.start()
+                t5.start()
+
+                t1.join()
+                t2.join()
+                t3.join()
+                t4.join()
+                t5.join()
+
+            else:
+                t = threading.Thread(target=thread_func, args=(pixels, 0, int(len(pixels)), option))
+                t.start()
+                t.join()
+
             print("\033[0m", end='')
     except OSError: 
         print("Could not open image file!")
 
-def read_media(infile, option):
+def read_media(infile, option, thrd):
     vidcap = cv2.VideoCapture(infile)
     i = 0
     # control frame rate in image
@@ -122,7 +154,7 @@ def read_media(infile, option):
             #     image = cv2.convertScaleAbs(image, alpha=1.25, beta=50)
             cv2.imwrite("frame.jpg", image)
             i = 0
-            print_from_image("frame.jpg", option)
+            print_from_image("frame.jpg", option, thrd)
             continue
         i += 1
     vidcap.release()
@@ -130,4 +162,5 @@ def read_media(infile, option):
 
 infile = sys.argv[1]
 colored_output = int(sys.argv[2])
-read_media(infile, colored_output)
+thread_exec = int(sys.argv[3])
+read_media(infile, colored_output, thread_exec)
