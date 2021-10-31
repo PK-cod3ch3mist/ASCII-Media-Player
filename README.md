@@ -5,6 +5,7 @@ A python program that creates ASCII graphics (with true color support if enabled
 ## Dependencies
 The program runs using python3
 The following python packages are used in the program:
+- pysrt
 - opencv-python
 - Pillow
 - numpy
