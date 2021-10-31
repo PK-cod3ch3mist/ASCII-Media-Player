@@ -151,7 +151,36 @@ def read_media(vidfile, subfile, option):
     vidcap.release()
     cv2.destroyAllWindows()
 
-vidfile = sys.argv[1]
-subfile = sys.argv[2]
-colored_output = int(sys.argv[3])
-read_media(vidfile, subfile, colored_output)
+def read_media(vidfile, option):
+    vidcap = cv2.VideoCapture(vidfile)
+    i = 0
+    # control frame rate in image
+    frame_skip = 0
+    os.system("clear")
+    while vidcap.isOpened():
+        # read frames from the image
+        success, image = vidcap.read()
+        if not success:
+            break
+        if i > frame_skip - 1:
+            # enhance the image (increase contrast and brightness) for terminal display
+            # TURN OFF (by commenting) IF YOU PREFER THE ORIGINAL COLOURS
+            if option == 1:
+                image = cv2.convertScaleAbs(image, alpha=1.25, beta=50)
+            cv2.imwrite("./data/frame.jpg", image)
+            i = 0
+            print_from_image("./data/frame.jpg", option)
+            continue
+        i += 1
+    vidcap.release()
+    cv2.destroyAllWindows()
+
+if len(sys.argv) == 3:
+    vidfile = sys.argv[1]
+    colored_output = int(sys.argv[2])
+    read_media(vidfile, colored_output)
+else:
+    vidfile = sys.argv[1]
+    subfile = sys.argv[2]
+    colored_output = int(sys.argv[3])
+    read_media(vidfile, subfile, colored_output)
