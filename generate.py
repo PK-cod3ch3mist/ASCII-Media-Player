@@ -35,6 +35,8 @@ def subtitle_show(subs, tstamp_ms):
     parts = subs.slice(starts_before={'milliseconds': int(tstamp_ms)}, ends_after={'milliseconds': int(tstamp_ms)})
     size = os.get_terminal_size()
     print("\033[" + str(size.lines - 2) + ";1H", end='')
+    for i in range(0, 3)
+        print(" " * int(size.columns))
     for part in parts:
         print(part.text)
 
@@ -100,7 +102,10 @@ def normalize_intensity_matrix(intensity_matrix):
     for row in intensity_matrix:
         rescaled_row = []
         for p in row:
-            r = MAX_PIXEL_VALUE * (p - min_pixel) / float(max_pixel - min_pixel)
+            denm = float(max_pixel - min_pixel)
+            if denm == 0:
+                denm = 1
+            r = MAX_PIXEL_VALUE * (p - min_pixel) / denm
             rescaled_row.append(r)
         normalized_intensity_matrix.append(rescaled_row)
 
@@ -121,7 +126,7 @@ def print_from_image(filename, option):
     except OSError: 
         print("Could not open image file!")
 
-def read_media(vidfile, subfile, option):
+def read_media_sub(vidfile, subfile, option):
     vidcap = cv2.VideoCapture(vidfile)
     subs = pysrt.open(subfile)
     i = 0
@@ -183,4 +188,4 @@ else:
     vidfile = sys.argv[1]
     subfile = sys.argv[2]
     colored_output = int(sys.argv[3])
-    read_media(vidfile, subfile, colored_output)
+    read_media_sub(vidfile, subfile, colored_output)
