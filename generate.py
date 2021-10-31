@@ -4,11 +4,12 @@ import numpy as np
 import os
 import cv2
 import threading
+import pysrt
 
 ASCII_CHARS = "`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
 MAX_PIXEL_VALUE = 255
 
-def thread_func(st_matrix, st, ed, option):
+def vid_render(st_matrix, st, ed, option):
     pixels = [st_matrix[i][:] for i in range (st, ed)]
     intensity_matrix = get_intensity_matrix(pixels, 3)
     intensity_matrix = normalize_intensity_matrix(intensity_matrix)
@@ -29,6 +30,14 @@ def thread_func(st_matrix, st, ed, option):
 
     print_matrix(ascii_matrix, st)
 
+def subtitle_show(subs, tstamp_ms):
+    # minutes = 
+    parts = subs.slice(starts_before={'milliseconds': int(tstamp_ms)}, ends_after={'milliseconds': int(tstamp_ms)})
+    size = os.get_terminal_size()
+    print("\033[" + str(size.lines - 2) + ";1H", end='')
+    for part in parts:
+        print(part.text)
+
 def get_pixel_matrix(image):
     image = image.convert("RGB")
             
@@ -36,7 +45,7 @@ def get_pixel_matrix(image):
     ac_row, ac_col = image.size
     # d1 and d2 are the width and height of image resp
     size = os.get_terminal_size()
-    d2 = min(size.lines - 1, int((ac_col * size.columns) / ac_row))
+    d2 = min(size.lines - 3, int((ac_col * size.columns) / ac_row))
     d1 = min(int(size.columns / 3), int((ac_row * d2) / ac_col))
 
     # set image to determined d1 and column size
@@ -97,7 +106,7 @@ def normalize_intensity_matrix(intensity_matrix):
 
     return normalized_intensity_matrix
 
-def print_from_image(filename, option, thrd):
+def print_from_image(filename, option):
     """Taking in an image, use its RGB values to decide upon an ASCII character
     to represent it. This ASCII character will be based upon the brightness
     measure calculated
@@ -107,37 +116,14 @@ def print_from_image(filename, option, thrd):
             pixels = get_pixel_matrix(image)
 
             print("\033[40m\033[37m", end='')
-
-            if thrd == 1:
-                t1 = threading.Thread(target=thread_func, args=(pixels, 0, int(len(pixels) / 5), option))
-                t2 = threading.Thread(target=thread_func, args=(pixels, int(len(pixels) / 5), int((len(pixels) / 5) * 2), option))
-                t3 = threading.Thread(target=thread_func, args=(pixels, int((len(pixels) / 5) * 2), int((len(pixels) / 3) * 3), option))
-                t4 = threading.Thread(target=thread_func, args=(pixels, int((len(pixels) / 5) * 3), int((len(pixels) / 5) * 4), option))
-                t5 = threading.Thread(target=thread_func, args=(pixels, int((len(pixels) / 5) * 4), int(len(pixels)), option))
-
-                t1.start()
-                t2.start()
-                t3.start()
-                t4.start()
-                t5.start()
-
-                t1.join()
-                t2.join()
-                t3.join()
-                t4.join()
-                t5.join()
-
-            else:
-                t = threading.Thread(target=thread_func, args=(pixels, 0, int(len(pixels)), option))
-                t.start()
-                t.join()
-
+            vid_render(pixels, 0, len(pixels), option)
             print("\033[0m", end='')
     except OSError: 
         print("Could not open image file!")
 
-def read_media(infile, option, thrd):
-    vidcap = cv2.VideoCapture(infile)
+def read_media(vidfile, subfile, option):
+    vidcap = cv2.VideoCapture(vidfile)
+    subs = pysrt.open(subfile)
     i = 0
     # control frame rate in image
     frame_skip = 0
@@ -150,17 +136,22 @@ def read_media(infile, option, thrd):
         if i > frame_skip - 1:
             # enhance the image (increase contrast and brightness) for terminal display
             # TURN OFF (by commenting) IF YOU PREFER THE ORIGINAL COLOURS
-            # if option == 1:
-            #     image = cv2.convertScaleAbs(image, alpha=1.25, beta=50)
+            if option == 1:
+                image = cv2.convertScaleAbs(image, alpha=1.25, beta=50)
             cv2.imwrite("frame.jpg", image)
             i = 0
-            print_from_image("frame.jpg", option, thrd)
+            render = threading.Thread(target=print_from_image, args=("frame.jpg", option))
+            subtitles = threading.Thread(target=subtitle_show, args=(subs, vidcap.get(cv2.CAP_PROP_POS_MSEC)))
+            render.start()
+            subtitles.start()
+            render.join()
+            subtitles.join()
             continue
         i += 1
     vidcap.release()
     cv2.destroyAllWindows()
 
-infile = sys.argv[1]
-colored_output = int(sys.argv[2])
-thread_exec = int(sys.argv[3])
-read_media(infile, colored_output, thread_exec)
+vidfile = sys.argv[1]
+subfile = sys.argv[2]
+colored_output = int(sys.argv[3])
+read_media(vidfile, subfile, colored_output)
