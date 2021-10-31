@@ -1,6 +1,5 @@
 <a href="https://github.com/PK-cod3ch3mist/ANSIArtGenerator"><img src="https://raw.githubusercontent.com/PK-cod3ch3mist/ANSIArtGenerator/main/assets/AMP.svg"></a>
-<hr>
-A python program that creates ASCII art (with true color support if enabled) from images and videos
+A python program that creates ASCII graphics (with true color support if enabled) from images and videos. It can also play videos with subtitle support! :scream:
 
 ## Dependencies
 The program runs using python3
