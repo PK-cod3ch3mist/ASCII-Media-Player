@@ -1,4 +1,4 @@
-<a href="https://github.com/PK-cod3ch3mist/ANSIArtGenerator"><img src="https://raw.githubusercontent.com/PK-cod3ch3mist/ANSIArtGenerator/main/assets/AMP.svg" alt="ASCII Media Player" width="400"></a>
+<a href="https://github.com/PK-cod3ch3mist/ANSIArtGenerator"><img src="https://raw.githubusercontent.com/PK-cod3ch3mist/ANSIArtGenerator/main/assets/AMP.svg" alt="ASCII Media Player" width="800"></a>
 A python program that creates ASCII graphics (with true color support if enabled) from images and videos. It can also play videos with subtitle support! :scream:
 
 ## Dependencies
