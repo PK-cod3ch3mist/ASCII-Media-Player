@@ -138,9 +138,9 @@ def read_media(vidfile, subfile, option):
             # TURN OFF (by commenting) IF YOU PREFER THE ORIGINAL COLOURS
             if option == 1:
                 image = cv2.convertScaleAbs(image, alpha=1.25, beta=50)
-            cv2.imwrite("frame.jpg", image)
+            cv2.imwrite("./data/frame.jpg", image)
             i = 0
-            render = threading.Thread(target=print_from_image, args=("frame.jpg", option))
+            render = threading.Thread(target=print_from_image, args=("./data/frame.jpg", option))
             subtitles = threading.Thread(target=subtitle_show, args=(subs, vidcap.get(cv2.CAP_PROP_POS_MSEC)))
             render.start()
             subtitles.start()

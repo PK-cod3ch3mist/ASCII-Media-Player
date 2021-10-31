@@ -1,4 +1,4 @@
-# ANSI Art Generator
+<a href="https://github.com/PK-cod3ch3mist/ANSIArtGenerator"><img src="https://github.com/PK-cod3ch3mist/ANSIArtGenerator/assets/AMP.svg"></a>
 A python program that creates ASCII art (with true color support if enabled) from images and videos
 
 ## Dependencies
