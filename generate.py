@@ -11,6 +11,7 @@ MAX_PIXEL_VALUE = 255
 
 def vid_render(st_matrix, st, ed, option):
     pixels = [st_matrix[i][:] for i in range (st, ed)]
+    # CONFIG OPTION - intensity measure
     intensity_matrix = get_intensity_matrix(pixels, 3)
     intensity_matrix = normalize_intensity_matrix(intensity_matrix)
     color_matrix = get_color_matrix(pixels)
@@ -139,6 +140,7 @@ def read_media_sub(vidfile, subfile, option):
         if not success:
             break
         if i > frame_skip - 1:
+            # CONFIG OPTION - contrast and brightness
             # enhance the image (increase contrast and brightness) for terminal display
             # TURN OFF (by commenting) IF YOU PREFER THE ORIGINAL COLOURS
             if option == 1:
@@ -168,6 +170,7 @@ def read_media(vidfile, option):
         if not success:
             break
         if i > frame_skip - 1:
+            # CONFIG OPTION - contrast and brightness
             # enhance the image (increase contrast and brightness) for terminal display
             # TURN OFF (by commenting) IF YOU PREFER THE ORIGINAL COLOURS
             if option == 1:

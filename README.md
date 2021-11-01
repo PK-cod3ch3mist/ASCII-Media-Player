@@ -1,6 +1,6 @@
 <a href="https://github.com/PK-cod3ch3mist/ANSIArtGenerator"><img src="https://raw.githubusercontent.com/PK-cod3ch3mist/ANSIArtGenerator/main/assets/AMP.svg" alt="ASCII Media Player" width="1000"></a>
 
-A python program that creates ASCII graphics (with true color support if enabled) from images and videos. It can also play videos with subtitle support! :scream:
+A python program that creates ASCII graphics (with true color support if enabled) from images and videos. It can also play videos with subtitle support (given a .srt file)! :scream:
 
 ## Dependencies
 The program runs using python3
@@ -17,9 +17,9 @@ These packages can be installed using any package manager for python like pip, c
 Also since the program **uses ANSI escape sequences**, all POSIX compliant terminals should work well. If you use windows, and the program doesn't work well, try switching to WSL (Windows Subsystem for Linux)
 
 ## A Demo
-Click below to view a demo for the usage of the program without subtitles. It is of lesser quality than what you would witness though, since I had to compress the screen recording to a managable size.
+Click below to view a demo for the usage of the program with subtitles. Due to Google Drive's colour codec however, the video may appear of a more dull colour than actual output. Moreover, you can easily change the contrast and brightness in the code (the part commented as `CONFIG OPTION - contrast and brightness`)
 
-<a href="https://drive.google.com/file/d/1B22lxNd0hxzxyd1Mgg0j_70LVKEbwZpn/view?usp=sharing">Demo Link</a>
+<a href="https://drive.google.com/file/d/1oRp_8KH3wkewvEIJVMmbMsoDMug9EiFl/view?usp=sharing">Demo Link</a>
 
 ## Usage
 Navigate to the directory of the python script and run the following command
