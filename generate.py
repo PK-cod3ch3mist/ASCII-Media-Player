@@ -36,7 +36,7 @@ def subtitle_show(subs, tstamp_ms):
     parts = subs.slice(starts_before={'milliseconds': int(tstamp_ms)}, ends_after={'milliseconds': int(tstamp_ms)})
     size = os.get_terminal_size()
     print("\033[" + str(size.lines - 2) + ";1H", end='')
-    for i in range(0, 3)
+    for i in range(0, 3):
         print(" " * int(size.columns))
     for part in parts:
         print(part.text)
