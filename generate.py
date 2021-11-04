@@ -3,7 +3,6 @@ from PIL import Image
 import numpy as np
 import os
 import cv2
-import threading
 import pysrt
 
 ASCII_CHARS = "`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
@@ -36,8 +35,9 @@ def subtitle_show(subs, tstamp_ms):
     parts = subs.slice(starts_before={'milliseconds': int(tstamp_ms)}, ends_after={'milliseconds': int(tstamp_ms)})
     size = os.get_terminal_size()
     print("\033[" + str(size.lines - 2) + ";1H", end='')
-    for i in range(0, 3):
+    for i in range(0, 2):
         print(" " * int(size.columns))
+    print("\033[" + str(size.lines - 2) + ";1H", end='')
     for part in parts:
         print(part.text)
 
@@ -147,12 +147,8 @@ def read_media_sub(vidfile, subfile, option):
                 image = cv2.convertScaleAbs(image, alpha=1.25, beta=50)
             cv2.imwrite("./data/frame.jpg", image)
             i = 0
-            render = threading.Thread(target=print_from_image, args=("./data/frame.jpg", option))
-            subtitles = threading.Thread(target=subtitle_show, args=(subs, vidcap.get(cv2.CAP_PROP_POS_MSEC)))
-            render.start()
-            subtitles.start()
-            render.join()
-            subtitles.join()
+            print_from_image("./data/frame.jpg", option)
+            subtitle_show(subs, vidcap.get(cv2.CAP_PROP_POS_MSEC))
             continue
         i += 1
     vidcap.release()
