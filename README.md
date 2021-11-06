@@ -17,11 +17,9 @@ These packages can be installed using any package manager for python like pip, c
 Also since the program **uses ANSI escape sequences**, all POSIX compliant terminals should work well. If you use windows, and the program doesn't work well, try switching to WSL (Windows Subsystem for Linux)
 
 ## A Demo
-<!-- Click below to view a demo for the usage of the program with subtitles. Due to Google Drive's colour codec however, the video may appear of a more dull colour than actual output. Moreover, you can easily change the contrast and brightness in the code (the part commented as `CONFIG OPTION - contrast and brightness`)
 
-<a href="https://drive.google.com/file/d/1oRp_8KH3wkewvEIJVMmbMsoDMug9EiFl/view?usp=sharing">Demo Link</a>
---->
-https://raw.githubusercontent.com/PK-cod3ch3mist/ASCII-Media-Player/main/assets/demo_video.mov
+https://user-images.githubusercontent.com/55488899/140598521-2b67960c-3cf4-4b52-b4a4-385237366e07.mov
+
 ## Usage
 Navigate to the directory of the python script and run the following command
 ```shell
