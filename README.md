@@ -21,7 +21,7 @@ Also since the program **uses ANSI escape sequences**, all POSIX compliant termi
 
 <a href="https://drive.google.com/file/d/1oRp_8KH3wkewvEIJVMmbMsoDMug9EiFl/view?usp=sharing">Demo Link</a>
 --->
-https://github.com/PK-cod3ch3mist/ASCII-Media-Player/blob/main/assets/demo_video.mp4
+https://raw.githubusercontent.com/PK-cod3ch3mist/ASCII-Media-Player/main/assets/demo_video.mov
 ## Usage
 Navigate to the directory of the python script and run the following command
 ```shell
