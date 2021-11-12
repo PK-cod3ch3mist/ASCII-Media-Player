@@ -154,7 +154,7 @@ def read_media_sub(vidfile, subfile, option):
             # CONFIG OPTION - contrast and brightness
             # enhance the image (increase contrast and brightness) for terminal display
             # TURN OFF (by commenting) IF YOU PREFER THE ORIGINAL COLOURS
-            if keyboard.is_pressed("s"):
+            if keyboard.is_pressed("alt+s"):
                 keyboard.wait("s")
             if option == 1:
                 image = cv2.convertScaleAbs(image, alpha=1.25, beta=50)
