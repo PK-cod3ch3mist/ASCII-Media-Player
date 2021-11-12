@@ -1,6 +1,5 @@
 import sys
-
-import keyboard as keyboard
+import keyboard
 from PIL import Image
 import numpy as np
 import os
@@ -151,11 +150,11 @@ def read_media_sub(vidfile, subfile, option):
         if not success:
             break
         if i > frame_skip - 1:
+            if keyboard.is_pressed("alt+s"):
+                keyboard.wait("s")
             # CONFIG OPTION - contrast and brightness
             # enhance the image (increase contrast and brightness) for terminal display
             # TURN OFF (by commenting) IF YOU PREFER THE ORIGINAL COLOURS
-            if keyboard.is_pressed("alt+s"):
-                keyboard.wait("s")
             if option == 1:
                 image = cv2.convertScaleAbs(image, alpha=1.25, beta=50)
             cv2.imwrite("./data/frame.jpg", image)
@@ -181,12 +180,12 @@ def read_media(vidfile, option):
         if not success:
             break
         if i > frame_skip - 1:
+            if keyboard.is_pressed("alt+s"):
+                keyboard.wait("s")
 
             # CONFIG OPTION - contrast and brightness
             # enhance the image (increase contrast and brightness) for terminal display
             # TURN OFF (by commenting) IF YOU PREFER THE ORIGINAL COLOURS
-            if keyboard.is_pressed("alt+s"):
-                keyboard.wait("s")
             if option == 1:
                 image = cv2.convertScaleAbs(image, alpha=1.25, beta=50)
             cv2.imwrite("./data/frame.jpg", image)
