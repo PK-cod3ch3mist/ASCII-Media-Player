@@ -9,6 +9,7 @@ The following python packages are used in the program:
 - opencv-python
 - Pillow
 - numpy
+- keyboard
 
 These packages can be installed using any package manager for python like pip, conda, etc.
 
