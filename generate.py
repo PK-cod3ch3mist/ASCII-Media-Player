@@ -1,6 +1,9 @@
 import sys
 <<<<<<< HEAD
+<<<<<<< HEAD
 import keyboard
+=======
+>>>>>>> parent of d4052fc (add play/pause video commands)
 =======
 >>>>>>> parent of d4052fc (add play/pause video commands)
 from PIL import Image
@@ -173,9 +176,12 @@ def read_media(vidfile, option):
             break
         if i > frame_skip - 1:
 <<<<<<< HEAD
+<<<<<<< HEAD
             if keyboard.is_pressed("alt+s"):
                 keyboard.wait("s")
 
+=======
+>>>>>>> parent of d4052fc (add play/pause video commands)
 =======
 >>>>>>> parent of d4052fc (add play/pause video commands)
             # CONFIG OPTION - contrast and brightness
