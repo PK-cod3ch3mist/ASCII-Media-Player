@@ -1,14 +1,4 @@
 import sys
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-import keyboard
-=======
->>>>>>> parent of d4052fc (add play/pause video commands)
-=======
->>>>>>> parent of d4052fc (add play/pause video commands)
-=======
->>>>>>> parent of d4052fc (add play/pause video commands)
 from PIL import Image
 import numpy as np
 import os
@@ -150,8 +140,6 @@ def read_media_sub(vidfile, subfile, option):
         if not success:
             break
         if i > frame_skip - 1:
-            if keyboard.is_pressed("alt+s"):
-                keyboard.wait("s")
             # CONFIG OPTION - contrast and brightness
             # enhance the image (increase contrast and brightness) for terminal display
             # TURN OFF (by commenting) IF YOU PREFER THE ORIGINAL COLOURS
@@ -178,18 +166,6 @@ def read_media(vidfile, option):
         if not success:
             break
         if i > frame_skip - 1:
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-            if keyboard.is_pressed("alt+s"):
-                keyboard.wait("s")
-
-=======
->>>>>>> parent of d4052fc (add play/pause video commands)
-=======
->>>>>>> parent of d4052fc (add play/pause video commands)
-=======
->>>>>>> parent of d4052fc (add play/pause video commands)
             # CONFIG OPTION - contrast and brightness
             # enhance the image (increase contrast and brightness) for terminal display
             # TURN OFF (by commenting) IF YOU PREFER THE ORIGINAL COLOURS
