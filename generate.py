@@ -1,5 +1,8 @@
 import sys
+<<<<<<< HEAD
 import keyboard
+=======
+>>>>>>> parent of d4052fc (add play/pause video commands)
 from PIL import Image
 import numpy as np
 import os
@@ -9,9 +12,8 @@ import pysrt
 ASCII_CHARS = "`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
 MAX_PIXEL_VALUE = 255
 
-
 def vid_render(st_matrix, st, ed, option):
-    pixels = [st_matrix[i][:] for i in range(st, ed)]
+    pixels = [st_matrix[i][:] for i in range (st, ed)]
     # CONFIG OPTION - intensity measure
     intensity_matrix = get_intensity_matrix(pixels, 3)
     intensity_matrix = normalize_intensity_matrix(intensity_matrix)
@@ -32,7 +34,6 @@ def vid_render(st_matrix, st, ed, option):
 
     print_matrix(ascii_matrix, st)
 
-
 def subtitle_show(subs, tstamp_ms):
     # minutes = 
     parts = subs.slice(starts_before={'milliseconds': int(tstamp_ms)}, ends_after={'milliseconds': int(tstamp_ms)})
@@ -44,10 +45,9 @@ def subtitle_show(subs, tstamp_ms):
     for part in parts:
         print(part.text)
 
-
 def get_pixel_matrix(image):
     image = image.convert("RGB")
-
+            
     # current row and column size definitions
     ac_row, ac_col = image.size
     # d1 and d2 are the width and height of image resp
@@ -58,17 +58,15 @@ def get_pixel_matrix(image):
     # set image to determined d1 and column size
     im = image.resize((d1, d2))
     pixels = list(im.getdata())
-    return [pixels[i:i + im.width] for i in range(0, len(pixels), im.width)]
-
+    return [pixels[i:i+im.width] for i in range(0, len(pixels), im.width)]
 
 def print_matrix(ascii_matrix, st):
     count = 1
     for line in ascii_matrix:
         line_extended = [p + p + p for p in line]
-        print("\033[" + str(st + count) + ";1H", end='')
+        print("\033[" + str(st + count)+ ";1H", end='')
         print("".join(line_extended))
         count += 1
-
 
 def get_color_matrix(pixels):
     color_matrix = []
@@ -78,7 +76,6 @@ def get_color_matrix(pixels):
             color_matrix_row.append("\033[38;2;" + str(p[0]) + ";" + str(p[1]) + ";" + str(p[2]) + "m")
         color_matrix.append(color_matrix_row)
     return color_matrix
-
 
 def get_intensity_matrix(pixels, option):
     """Set the measure of brightness to be used depending upon the
@@ -103,7 +100,6 @@ def get_intensity_matrix(pixels, option):
 
     return intensity_matrix
 
-
 def normalize_intensity_matrix(intensity_matrix):
     normalized_intensity_matrix = []
     max_pixel = max(map(max, intensity_matrix))
@@ -120,7 +116,6 @@ def normalize_intensity_matrix(intensity_matrix):
 
     return normalized_intensity_matrix
 
-
 def print_from_image(filename, option):
     """Taking in an image, use its RGB values to decide upon an ASCII character
     to represent it. This ASCII character will be based upon the brightness
@@ -133,9 +128,8 @@ def print_from_image(filename, option):
             print("\033[40m\033[37m", end='')
             vid_render(pixels, 0, len(pixels), option)
             print("\033[0m", end='')
-    except OSError:
+    except OSError: 
         print("Could not open image file!")
-
 
 def read_media_sub(vidfile, subfile, option):
     vidcap = cv2.VideoCapture(vidfile)
@@ -166,7 +160,6 @@ def read_media_sub(vidfile, subfile, option):
     vidcap.release()
     cv2.destroyAllWindows()
 
-
 def read_media(vidfile, option):
     vidcap = cv2.VideoCapture(vidfile)
     i = 0
@@ -176,13 +169,15 @@ def read_media(vidfile, option):
     while vidcap.isOpened():
         # read frames from the image
         success, image = vidcap.read()
-
         if not success:
             break
         if i > frame_skip - 1:
+<<<<<<< HEAD
             if keyboard.is_pressed("alt+s"):
                 keyboard.wait("s")
 
+=======
+>>>>>>> parent of d4052fc (add play/pause video commands)
             # CONFIG OPTION - contrast and brightness
             # enhance the image (increase contrast and brightness) for terminal display
             # TURN OFF (by commenting) IF YOU PREFER THE ORIGINAL COLOURS
@@ -192,12 +187,9 @@ def read_media(vidfile, option):
             i = 0
             print_from_image("./data/frame.jpg", option)
             continue
-
         i += 1
-
     vidcap.release()
     cv2.destroyAllWindows()
-
 
 if len(sys.argv) == 3:
     vidfile = sys.argv[1]
