@@ -1,7 +1,10 @@
 import sys
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import keyboard
+=======
+>>>>>>> parent of d4052fc (add play/pause video commands)
 =======
 >>>>>>> parent of d4052fc (add play/pause video commands)
 =======
@@ -177,9 +180,12 @@ def read_media(vidfile, option):
         if i > frame_skip - 1:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             if keyboard.is_pressed("alt+s"):
                 keyboard.wait("s")
 
+=======
+>>>>>>> parent of d4052fc (add play/pause video commands)
 =======
 >>>>>>> parent of d4052fc (add play/pause video commands)
 =======
