@@ -9,11 +9,8 @@ The following python packages are used in the program:
 - opencv-python
 - Pillow
 - numpy
-- keyboard
 
 These packages can be installed using any package manager for python like pip, conda, etc.
-
-**Note:** Due to the package keyboard's experimental/unpredictable behaviour on macOS, the program might not work with it. In that case, do not use this beta release and instead use the previous release.
 
 **A true-colour terminal is required to see videos and images in colour.**
 
