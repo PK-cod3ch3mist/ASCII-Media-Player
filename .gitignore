@@ -1,2 +1,3 @@
 # images generated from program
 *.jpg
+.DS_Store
