@@ -2,10 +2,10 @@
 
 A python program that creates ASCII graphics (with true color support if enabled) from images and videos. It can also play videos with subtitle support (given a .srt file)! :scream:
 
-# 🧐 Motivation
-You have seen Music Players, Stackoverflow surfers, Hacker News portals etc. in the terminal, so it the logical next step 😀. Besides, the terminal makes almost everything appear x10 times more cool.
+# 🍎 Motivation
+You have seen Music Players, Stackoverflow surfers, Hacker News portals etc. in the terminal, so it is the logical next step 😅. Besides, the terminal makes almost everything appear x10 times more cool.
 
-# Dependencies
+# ⚗️ Dependencies
 
 ## Language and Packages
 The program runs using python3
@@ -26,7 +26,7 @@ Also since the program **uses ANSI escape sequences**, all POSIX compliant termi
 
 https://user-images.githubusercontent.com/55488899/140598521-2b67960c-3cf4-4b52-b4a4-385237366e07.mov
 
-# :hammer: Usage
+# 🛠️ Usage
 Navigate to the directory of the python script and run the following command
 ```shell
 python generate.py $VIDEO_FILENAME $SUBTITLE_FILENAME $OPTION
