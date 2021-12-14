@@ -1,5 +1,5 @@
 import sys
-import keyboard
+from pynput import keyboard
 from PIL import Image
 import numpy as np
 import os
@@ -8,6 +8,7 @@ import pysrt
 
 ASCII_CHARS = "`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
 MAX_PIXEL_VALUE = 255
+pause = False
 
 
 def vid_render(st_matrix, st, ed, option):
@@ -144,14 +145,23 @@ def read_media_sub(vidfile, subfile, option):
     # control frame rate in image
     frame_skip = 0
     os.system("clear")
+    def on_press(key):
+        global pause
+        if key == keyboard.Key.space:
+            pause = not pause
+
+    listener = keyboard.Listener(on_press=on_press)
+    listener.start()
+
     while vidcap.isOpened():
         # read frames from the image
         success, image = vidcap.read()
         if not success:
             break
         if i > frame_skip - 1:
-            if keyboard.is_pressed("alt+s"):
-                keyboard.wait("s")
+            while pause:
+                if not pause:
+                    break
             # CONFIG OPTION - contrast and brightness
             # enhance the image (increase contrast and brightness) for terminal display
             # TURN OFF (by commenting) IF YOU PREFER THE ORIGINAL COLOURS
@@ -173,6 +183,14 @@ def read_media(vidfile, option):
     # control frame rate in image
     frame_skip = 0
     os.system("clear")
+    def on_press(key):
+        global pause
+        if key == keyboard.Key.space:
+            pause = not pause
+
+    listener = keyboard.Listener(on_press=on_press)
+    listener.start()
+
     while vidcap.isOpened():
         # read frames from the image
         success, image = vidcap.read()
@@ -180,9 +198,9 @@ def read_media(vidfile, option):
         if not success:
             break
         if i > frame_skip - 1:
-            if keyboard.is_pressed("alt+s"):
-                keyboard.wait("s")
-
+            while pause:
+                if not pause:
+                    break
             # CONFIG OPTION - contrast and brightness
             # enhance the image (increase contrast and brightness) for terminal display
             # TURN OFF (by commenting) IF YOU PREFER THE ORIGINAL COLOURS
