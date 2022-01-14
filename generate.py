@@ -4,6 +4,7 @@ import numpy as np
 import os
 import cv2
 import pysrt
+import tty
 
 ASCII_CHARS = "`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
 MAX_PIXEL_VALUE = 255
@@ -179,6 +180,7 @@ def read_media(vidfile, option):
     vidcap.release()
     cv2.destroyAllWindows()
 
+tty.setraw(sys.stdin)
 if len(sys.argv) == 3:
     vidfile = sys.argv[1]
     colored_output = int(sys.argv[2])
