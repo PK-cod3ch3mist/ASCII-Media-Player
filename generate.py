@@ -9,6 +9,8 @@ ASCII_CHARS = "`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B
 MAX_PIXEL_VALUE = 255
 
 def vid_render(st_matrix, st, ed, option):
+    """Function to convert the pixel data to a matrix of corresponding ASCII characters.
+    """
     pixels = [st_matrix[i][:] for i in range (st, ed)]
     # CONFIG OPTION - intensity measure
     intensity_matrix = get_intensity_matrix(pixels, 3)
@@ -31,7 +33,7 @@ def vid_render(st_matrix, st, ed, option):
     print_matrix(ascii_matrix, st)
 
 def subtitle_show(subs, tstamp_ms):
-    # minutes = 
+    """Function to get subtitles of current frame and display them"""
     parts = subs.slice(starts_before={'milliseconds': int(tstamp_ms)}, ends_after={'milliseconds': int(tstamp_ms)})
     size = os.get_terminal_size()
     print("\033[" + str(size.lines - 2) + ";1H", end='')
@@ -42,6 +44,7 @@ def subtitle_show(subs, tstamp_ms):
         print(part.text)
 
 def get_pixel_matrix(image):
+    """Function to get image from the media file and change its dimensions to fit the terminal, then turning it into pixel matrix."""
     image = image.convert("RGB")
             
     # current row and column size definitions
@@ -57,6 +60,7 @@ def get_pixel_matrix(image):
     return [pixels[i:i+im.width] for i in range(0, len(pixels), im.width)]
 
 def print_matrix(ascii_matrix, st):
+    """Function to print the ASCII matrix"""
     count = 1
     for line in ascii_matrix:
         line_extended = [p + p + p for p in line]
@@ -65,6 +69,7 @@ def print_matrix(ascii_matrix, st):
         count += 1
 
 def get_color_matrix(pixels):
+    """Function to get the colour codes (ANSI escape sequences) from RGB values of pixel."""
     color_matrix = []
     for row in pixels:
         color_matrix_row = []
@@ -74,8 +79,8 @@ def get_color_matrix(pixels):
     return color_matrix
 
 def get_intensity_matrix(pixels, option):
-    """Set the measure of brightness to be used depending upon the
-    option chosen, we chose between three measures namely luminance,
+    """Function to set the measure of brightness to be used depending upon the
+    option, choose between three measures namely luminance,
     lightness and average pixel values
     """
     intensity_matrix = []
@@ -97,6 +102,7 @@ def get_intensity_matrix(pixels, option):
     return intensity_matrix
 
 def normalize_intensity_matrix(intensity_matrix):
+    """Function to normalize the intensity matrix so that values fall between acceptable limits."""
     normalized_intensity_matrix = []
     max_pixel = max(map(max, intensity_matrix))
     min_pixel = min(map(min, intensity_matrix))
@@ -113,9 +119,11 @@ def normalize_intensity_matrix(intensity_matrix):
     return normalized_intensity_matrix
 
 def print_from_image(filename, option):
-    """Taking in an image, use its RGB values to decide upon an ASCII character
+    """Function to take in an image & use its RGB values to decide upon an ASCII character
     to represent it. This ASCII character will be based upon the brightness
     measure calculated
+
+    Manager function.
     """
     try:
         with Image.open(filename) as image:
@@ -128,6 +136,7 @@ def print_from_image(filename, option):
         print("Could not open image file!")
 
 def read_media_sub(vidfile, subfile, option):
+    """Function to read the media file and pass on data to rendering functions frame by frame."""
     vidcap = cv2.VideoCapture(vidfile)
     subs = pysrt.open(subfile)
     i = 0
@@ -155,6 +164,7 @@ def read_media_sub(vidfile, subfile, option):
     cv2.destroyAllWindows()
 
 def read_media(vidfile, option):
+    """Function to read the media file and pass on data to rendering functions frame by frame."""
     vidcap = cv2.VideoCapture(vidfile)
     i = 0
     # control frame rate in image
