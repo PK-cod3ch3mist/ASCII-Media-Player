@@ -18,9 +18,8 @@ The following python packages are used in the program:
 These packages can be installed using any package manager for python like pip, conda, etc.
 
 ## Terminal Requirements
-**A true-colour terminal is required to see videos and images in colour.**
 
-Also since the program **uses ANSI escape sequences**, all POSIX compliant terminals should work well. If you use windows, and the program doesn't work well, try switching to WSL (Windows Subsystem for Linux)
+All POSIX compliant terminals should work well. If you use windows, and the program doesn't work well, try switching to WSL (Windows Subsystem for Linux)
 
 # 🎥 A Demo
 
@@ -38,8 +37,8 @@ python generate.py $VIDEO_FILENAME $OPTION
 Here `$VIDEO_FILENAME` and `$SUBTITLE_FILENAME` are the full path to the files and `$OPTION` takes values **0 for black and white output** and **1 for true color output** (see if your terminal supports true color before enabling)
 
 # 📝 TODO and Future Plans
-- [ ] Support 3-bit RGB (8-colors) with dithering
-- [x] Support true color (24-bit RGB)
-- [x] Support automatic resizing
+- [x] Support 3-bit RGB (8-colors)
+- [x] Support true color (24-bit RGB) *visit tc-version branch*
+- [ ] Support automatic resizing
 - [x] Support B&W output
 - [x] Support subtitles
