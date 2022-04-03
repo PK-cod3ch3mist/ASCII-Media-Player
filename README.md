@@ -2,7 +2,7 @@
 
 A python program that creates ASCII graphics (with true color support if enabled) from images and videos. It can also play videos with subtitle support (given a .srt file)! :scream:
 
-*This is the beta branch of the repository, features may break here. If something unusual comes up in use of the code from this branch, kindly raise an issue.*
+*This is the branch of the repository that supports true colours. If you have a terminal that does not support true colours, visit main branch.*
 
 ## Dependencies
 The program runs using python3
@@ -15,7 +15,7 @@ The following python packages are used in the program:
 
 These packages can be installed using any package manager for python like pip, conda, etc.
 
-**Note:** Due to the package keyboard's experimental/unpredictable behaviour on macOS, the program might not work with it. In that case, do not use this beta release and instead use the previous release.
+**Note:** Due to the package keyboard's experimental/unpredictable behaviour on macOS, the program might not work with it.
 
 **A true-colour terminal is required to see videos and images in colour.**
 
