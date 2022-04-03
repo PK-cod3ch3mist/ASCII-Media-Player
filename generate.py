@@ -1,14 +1,14 @@
 import sys
 from PIL import Image
-import numpy as np
-import os
+import numpy
+import time
 import cv2
 import pysrt
 import curses
 
 ASCII_CHAR_ARRAY = (" .:-=+*#%@", " .,:ilwW", " ▏▁░▂▖▃▍▐▒▀▞▚▌▅▆▊▓▇▉█", " `^|1aUBN", " .`!?xyWN")
 
-ASCII_CHARS = ASCII_CHAR_ARRAY[0]
+ASCII_CHARS = ASCII_CHAR_ARRAY[3]
 MAX_PIXEL_VALUE = 255
 
 def vid_render(st_matrix, st, ed, option):
@@ -65,9 +65,9 @@ def get_color_matrix(pixels):
     for row in pixels:
         color_matrix_row = []
         for p in row:
-            r = round(p[0]/127)
-            g = round(p[1]/127)
-            b = round(p[2]/127)
+            r = round(p[0]/255)
+            g = round(p[1]/255)
+            b = round(p[2]/255)
             cNum = 0
             if r + g + b != 3:
                 if r == 1 and g == 1:
@@ -140,42 +140,38 @@ def print_from_image(filename, option):
 def read_media_sub(vidfile, subfile, option):
     vidcap = cv2.VideoCapture(vidfile)
     subs = pysrt.open(subfile)
-    i = 0
-    # control frame rate in image
-    frame_skip = 0
-    os.system("clear")
+    fps = vidcap.get(cv2.CAP_PROP_FPS)
     while vidcap.isOpened():
         # read frames from the image
         success, image = vidcap.read()
         if not success:
             break
-        if i > frame_skip - 1:
-            cv2.imwrite("./data/frame.jpg", image)
-            i = 0
-            print_from_image("./data/frame.jpg", option)
-            subtitle_show(subs, vidcap.get(cv2.CAP_PROP_POS_MSEC))
-            continue
-        i += 1
+        dur = time.process_time()
+        cv2.imwrite("./data/frame.jpg", image)
+        print_from_image("./data/frame.jpg", option)
+        subtitle_show(subs, vidcap.get(cv2.CAP_PROP_POS_MSEC))
+        dur = (time.process_time() - dur)
+        dur *= 1000
+        if (round(1000/fps - dur) >= 0):
+            curses.napms(round(1000/fps - dur))
     vidcap.release()
     cv2.destroyAllWindows()
 
 def read_media(vidfile, option):
     vidcap = cv2.VideoCapture(vidfile)
-    i = 0
-    # control frame rate in image
-    frame_skip = 0
-    os.system("clear")
+    fps = vidcap.get(cv2.CAP_PROP_FPS)
     while vidcap.isOpened():
         # read frames from the image
         success, image = vidcap.read()
         if not success:
             break
-        if i > frame_skip - 1:
-            cv2.imwrite("./data/frame.jpg", image)
-            i = 0
-            print_from_image("./data/frame.jpg", option)
-            continue
-        i += 1
+        dur = time.process_time()
+        cv2.imwrite("./data/frame.jpg", image)
+        print_from_image("./data/frame.jpg", option)
+        dur = (time.process_time() - dur)
+        dur *= 1000
+        if (round(1000/fps - dur) >= 0):
+            curses.napms(round(1000/fps - dur))
     vidcap.release()
     cv2.destroyAllWindows()
 
@@ -190,20 +186,20 @@ curses.init_pair(4, curses.COLOR_RED, curses.COLOR_BLACK)
 curses.init_pair(5, curses.COLOR_GREEN, curses.COLOR_BLACK)
 curses.init_pair(6, curses.COLOR_BLUE, curses.COLOR_BLACK)
 if len(sys.argv) == 3:
-    beginX = 1; beginY = 1
-    height = curses.LINES - 1; width = curses.COLS - 1
+    beginX = 0; beginY = 0
+    height = curses.LINES; width = curses.COLS
     media = curses.newwin(height - 1, width - 1, beginY, beginX)
     media.border(0, 0, 0, 0, 0, 0, 0, 0)
-    # vidfile = sys.argv[1]
-    # colored_output = int(sys.argv[2])
-    # read_media(vidfile, colored_output)
+    vidfile = sys.argv[1]
+    colored_output = int(sys.argv[2])
+    read_media(vidfile, colored_output)
 else:
-    beginX = 1; beginY = 1
-    height = curses.LINES - 7; width = curses.COLS - 2
+    beginX = 0; beginY = 0
+    height = curses.LINES - 5; width = curses.COLS
     media = curses.newwin(height, width, beginY, beginX)
     media.border(0, 0, 0, 0, 0, 0, 0, 0)
-    beginX = 1; beginY = curses.LINES - 6
-    height = 5; width = curses.COLS - 2
+    beginX = 0; beginY = curses.LINES - 5
+    height = 5; width = curses.COLS
     captions = curses.newwin(height, width, beginY, beginX)
     captions.border(0, 0, 0, 0, 0, 0, 0, 0)
     vidfile = sys.argv[1]
