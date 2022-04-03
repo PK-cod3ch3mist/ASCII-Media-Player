@@ -1,6 +1,8 @@
 <a href="https://github.com/PK-cod3ch3mist/ANSIArtGenerator"><img src="https://raw.githubusercontent.com/PK-cod3ch3mist/ANSIArtGenerator/main/assets/AMP.svg" alt="ASCII Media Player" width="1000"></a>
 
-A python program that creates ASCII graphics (with true color support if enabled) from images and videos. It can also play videos with subtitle support (given a .srt file)! :scream:
+A python program that creates ASCII graphics from images and videos. It can also play videos with subtitle support (given a .srt file)! :scream:
+
+This is the alpha branch of the application that supports 8 color terminals. It uses ncurses and hence works in WSL, Linux and macOS.
 
 # 🍎 Motivation
 You have seen Music Players, Stackoverflow surfers, Hacker News portals etc. in the terminal, so it is the logical next step 😅. Besides, the terminal makes almost everything appear x10 times more cool.
