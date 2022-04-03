@@ -37,7 +37,7 @@ python generate.py $VIDEO_FILENAME $OPTION
 Here `$VIDEO_FILENAME` and `$SUBTITLE_FILENAME` are the full path to the files and `$OPTION` takes values **0 for black and white output** and **1 for true color output** (see if your terminal supports true color before enabling)
 
 ## TODO
-- [ ] Support 3-bit RGB (8-colors) with dithering
+- [ ] Support 3-bit RGB (8-colors) *visit main branch*
 - [x] Support true color (24-bit RGB)
 - [x] Support automatic resizing
 - [x] Support B&W output
