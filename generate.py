@@ -6,7 +6,9 @@ import cv2
 import pysrt
 import curses
 
-ASCII_CHARS = " `^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+ASCII_CHAR_ARRAY = (" .:-=+*#%@", " .,:ilwW", " ▏▁░▂▖▃▍▐▒▀▞▚▌▅▆▊▓▇▉█", " `^|1aUBN", " .`!?xyWN")
+
+ASCII_CHARS = ASCII_CHAR_ARRAY[0]
 MAX_PIXEL_VALUE = 255
 
 def vid_render(st_matrix, st, ed, option):
@@ -14,7 +16,7 @@ def vid_render(st_matrix, st, ed, option):
     pixels = [st_matrix[i][:] for i in range (st, ed)]
     # CONFIG OPTION - intensity measure
     intensity_matrix = get_intensity_matrix(pixels, 3)
-    # intensity_matrix = normalize_intensity_matrix(intensity_matrix)
+    intensity_matrix = normalize_intensity_matrix(intensity_matrix)
     color_matrix = get_color_matrix(pixels)
 
     for i in range(len(intensity_matrix)):
@@ -66,21 +68,20 @@ def get_color_matrix(pixels):
             r = round(p[0]/127)
             g = round(p[1]/127)
             b = round(p[2]/127)
-            cNum = 1
-            if r + g + b == 3:
-                cNum = 0
-            elif r == 1 and g == 1:
-                cNum = 2
-            elif r == 1 and b == 1:
-                cNum = 3
-            elif g == 1 and b == 1:
-                cNum = 4
-            elif r == 1:
-                cNum = 5
-            elif g == 1:
-                cNum = 6
-            elif b == 1:
-                cNum = 7
+            cNum = 0
+            if r + g + b != 3:
+                if r == 1 and g == 1:
+                    cNum = 1
+                elif r == 1 and b == 1:
+                    cNum = 2
+                elif g == 1 and b == 1:
+                    cNum = 3
+                elif r == 1:
+                    cNum = 4
+                elif g == 1:
+                    cNum = 5
+                elif b == 1:
+                    cNum = 6
             color_matrix_row.append(cNum)
         color_matrix.append(color_matrix_row)
     return color_matrix
@@ -182,13 +183,12 @@ stdscr = curses.initscr()
 curses.noecho()
 curses.cbreak()
 curses.start_color()
-curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_BLACK)
-curses.init_pair(2, curses.COLOR_YELLOW, curses.COLOR_BLACK)
-curses.init_pair(3, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
-curses.init_pair(4, curses.COLOR_CYAN, curses.COLOR_BLACK)
-curses.init_pair(5, curses.COLOR_RED, curses.COLOR_BLACK)
-curses.init_pair(6, curses.COLOR_GREEN, curses.COLOR_BLACK)
-curses.init_pair(7, curses.COLOR_BLUE, curses.COLOR_BLACK)
+curses.init_pair(1, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+curses.init_pair(2, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
+curses.init_pair(3, curses.COLOR_CYAN, curses.COLOR_BLACK)
+curses.init_pair(4, curses.COLOR_RED, curses.COLOR_BLACK)
+curses.init_pair(5, curses.COLOR_GREEN, curses.COLOR_BLACK)
+curses.init_pair(6, curses.COLOR_BLUE, curses.COLOR_BLACK)
 if len(sys.argv) == 3:
     beginX = 1; beginY = 1
     height = curses.LINES - 1; width = curses.COLS - 1
