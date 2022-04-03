@@ -2,8 +2,6 @@
 
 A python program that creates ASCII graphics from images and videos. It can also play videos with subtitle support (given a .srt file)! :scream:
 
-This is the alpha branch of the application that supports 8 color terminals. It uses ncurses and hence works in WSL, Linux and macOS.
-
 # 🍎 Motivation
 You have seen Music Players, Stackoverflow surfers, Hacker News portals etc. in the terminal, so it is the logical next step 😅. Besides, the terminal makes almost everything appear x10 times more cool.
 
