@@ -2,7 +2,7 @@
 Thank you for showing your interest in the repository and the idea. I am grateful to be working with fellow developers.
 
 ## Raising Issues
-*Issues may be raised only upon problems raised while using the main and beta branches.* 
+*Issues may be raised only upon problems raised while using the main and tc-version branches.* 
 
 Note that alpha branch code is highly unstable and is expected to break, kindly do not raise issues regarding it.
 When raising an issue, try your best to include the following information:
@@ -19,7 +19,7 @@ If some infromation is not available to you, you should mention that too.
 *When contributing, you can contribute to any branch.
 The issues page will give you a list of issues you can resolve in the main branch.*
 
-When contributing code to repository, kindly used modularised code. 
+When contributing code to repository, kindly use modularised code. 
 Don't worry too much about the code style. The project is in the nascent stage, and code style is
 not a worry at the point.
 
