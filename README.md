@@ -26,7 +26,7 @@ Also since the program **uses ANSI escape sequences**, all POSIX compliant termi
 
 # 🎥 A Demo
 
-https://user-images.githubusercontent.com/55488899/140598521-2b67960c-3cf4-4b52-b4a4-385237366e07.mov
+https://user-images.githubusercontent.com/55488899/161427699-1d606858-4a3d-4490-b21e-ecd4ac56a83b.mp4
 
 # 🛠️ Usage
 Navigate to the directory of the python script and run the following command
