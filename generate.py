@@ -1,45 +1,49 @@
 import sys
 from PIL import Image
-import numpy as np
-import os
+import numpy
+import time
 import cv2
 import pysrt
+import curses
 
-ASCII_CHARS = "`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+ASCII_CHAR_ARRAY = (" .:-=+*#%@", " .,:ilwW", " ▏▁░▂▖▃▍▐▒▀▞▚▌▅▆▊▓▇▉█", " `^|1aUBN", " .`!?xyWN")
+
+ASCII_CHARS = ASCII_CHAR_ARRAY[3]
 MAX_PIXEL_VALUE = 255
 
 def vid_render(st_matrix, st, ed, option):
+    media.addstr(0, 1, "Video Playback")
     pixels = [st_matrix[i][:] for i in range (st, ed)]
     # CONFIG OPTION - intensity measure
     intensity_matrix = get_intensity_matrix(pixels, 3)
     intensity_matrix = normalize_intensity_matrix(intensity_matrix)
     color_matrix = get_color_matrix(pixels)
 
-    ascii_matrix = []
     for i in range(len(intensity_matrix)):
-        ascii_row = []
+        offset = 1
         for j in range(len(intensity_matrix[0])):
             intensity = intensity_matrix[i][j]
             symbol_index = int(intensity / MAX_PIXEL_VALUE * len(ASCII_CHARS)) - 1
             symbol_index = symbol_index + 1 if symbol_index < 0 else symbol_index
+            asciiStr = ASCII_CHARS[symbol_index] + ASCII_CHARS[symbol_index] + ASCII_CHARS[symbol_index]
             if option == 1:
                 color = color_matrix[i][j]
-                ascii_row.append(color)
-            ascii_row.append(ASCII_CHARS[symbol_index])
-        ascii_matrix.append(ascii_row)
+                media.addstr(i + 1, offset, asciiStr, curses.color_pair(color))
+            else:
+                media.addstr(i + 1, offset, asciiStr, curses.color_pair(0))
+            offset += 3
 
-    print_matrix(ascii_matrix, st)
+    media.refresh()
 
 def subtitle_show(subs, tstamp_ms):
     # minutes = 
     parts = subs.slice(starts_before={'milliseconds': int(tstamp_ms)}, ends_after={'milliseconds': int(tstamp_ms)})
-    size = os.get_terminal_size()
-    print("\033[" + str(size.lines - 2) + ";1H", end='')
-    for i in range(0, 2):
-        print(" " * int(size.columns))
-    print("\033[" + str(size.lines - 2) + ";1H", end='')
+    captions.addstr(0, 1, "Captions")
+    captions.move(1, 1)
     for part in parts:
-        print(part.text)
+        captions.addstr(part.text, curses.A_BOLD)
+
+    captions.refresh()
 
 def get_pixel_matrix(image):
     image = image.convert("RGB")
@@ -47,29 +51,38 @@ def get_pixel_matrix(image):
     # current row and column size definitions
     ac_row, ac_col = image.size
     # d1 and d2 are the width and height of image resp
-    size = os.get_terminal_size()
-    d2 = min(size.lines - 3, int((ac_col * size.columns) / ac_row))
-    d1 = min(int(size.columns / 3), int((ac_row * d2) / ac_col))
+    size = media.getmaxyx()
+    d2 = min((size[0] - 2) - 3, int((ac_col * (size[1] - 2)) / ac_row))
+    d1 = min(int((size[1] - 2) / 3), int((ac_row * d2) / ac_col))
 
     # set image to determined d1 and column size
     im = image.resize((d1, d2))
     pixels = list(im.getdata())
     return [pixels[i:i+im.width] for i in range(0, len(pixels), im.width)]
 
-def print_matrix(ascii_matrix, st):
-    count = 1
-    for line in ascii_matrix:
-        line_extended = [p + p + p for p in line]
-        print("\033[" + str(st + count)+ ";1H", end='')
-        print("".join(line_extended))
-        count += 1
-
 def get_color_matrix(pixels):
     color_matrix = []
     for row in pixels:
         color_matrix_row = []
         for p in row:
-            color_matrix_row.append("\033[38;2;" + str(p[0]) + ";" + str(p[1]) + ";" + str(p[2]) + "m")
+            r = round(p[0]/255)
+            g = round(p[1]/255)
+            b = round(p[2]/255)
+            cNum = 0
+            if r + g + b != 3:
+                if r == 1 and g == 1:
+                    cNum = 1
+                elif r == 1 and b == 1:
+                    cNum = 2
+                elif g == 1 and b == 1:
+                    cNum = 3
+                elif r == 1:
+                    cNum = 4
+                elif g == 1:
+                    cNum = 5
+                elif b == 1:
+                    cNum = 6
+            color_matrix_row.append(cNum)
         color_matrix.append(color_matrix_row)
     return color_matrix
 
@@ -120,71 +133,81 @@ def print_from_image(filename, option):
     try:
         with Image.open(filename) as image:
             pixels = get_pixel_matrix(image)
-
-            print("\033[40m\033[37m", end='')
             vid_render(pixels, 0, len(pixels), option)
-            print("\033[0m", end='')
     except OSError: 
         print("Could not open image file!")
 
 def read_media_sub(vidfile, subfile, option):
     vidcap = cv2.VideoCapture(vidfile)
     subs = pysrt.open(subfile)
-    i = 0
-    # control frame rate in image
-    frame_skip = 0
-    os.system("clear")
+    fps = vidcap.get(cv2.CAP_PROP_FPS)
     while vidcap.isOpened():
         # read frames from the image
         success, image = vidcap.read()
         if not success:
             break
-        if i > frame_skip - 1:
-            # CONFIG OPTION - contrast and brightness
-            # enhance the image (increase contrast and brightness) for terminal display
-            # TURN OFF (by commenting) IF YOU PREFER THE ORIGINAL COLOURS
-            if option == 1:
-                image = cv2.convertScaleAbs(image, alpha=1.25, beta=50)
-            cv2.imwrite("./data/frame.jpg", image)
-            i = 0
-            print_from_image("./data/frame.jpg", option)
-            subtitle_show(subs, vidcap.get(cv2.CAP_PROP_POS_MSEC))
-            continue
-        i += 1
+        dur = time.process_time()
+        cv2.imwrite("./data/frame.jpg", image)
+        print_from_image("./data/frame.jpg", option)
+        subtitle_show(subs, vidcap.get(cv2.CAP_PROP_POS_MSEC))
+        dur = (time.process_time() - dur)
+        dur *= 1000
+        if (round(1000/fps - dur) >= 0):
+            curses.napms(round(1000/fps - dur))
     vidcap.release()
     cv2.destroyAllWindows()
 
 def read_media(vidfile, option):
     vidcap = cv2.VideoCapture(vidfile)
-    i = 0
-    # control frame rate in image
-    frame_skip = 0
-    os.system("clear")
+    fps = vidcap.get(cv2.CAP_PROP_FPS)
     while vidcap.isOpened():
         # read frames from the image
         success, image = vidcap.read()
         if not success:
             break
-        if i > frame_skip - 1:
-            # CONFIG OPTION - contrast and brightness
-            # enhance the image (increase contrast and brightness) for terminal display
-            # TURN OFF (by commenting) IF YOU PREFER THE ORIGINAL COLOURS
-            if option == 1:
-                image = cv2.convertScaleAbs(image, alpha=1.25, beta=50)
-            cv2.imwrite("./data/frame.jpg", image)
-            i = 0
-            print_from_image("./data/frame.jpg", option)
-            continue
-        i += 1
+        dur = time.process_time()
+        cv2.imwrite("./data/frame.jpg", image)
+        print_from_image("./data/frame.jpg", option)
+        dur = (time.process_time() - dur)
+        dur *= 1000
+        if (round(1000/fps - dur) >= 0):
+            curses.napms(round(1000/fps - dur))
     vidcap.release()
     cv2.destroyAllWindows()
 
+stdscr = curses.initscr()
+curses.noecho()
+curses.cbreak()
+curses.start_color()
+curses.init_pair(1, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+curses.init_pair(2, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
+curses.init_pair(3, curses.COLOR_CYAN, curses.COLOR_BLACK)
+curses.init_pair(4, curses.COLOR_RED, curses.COLOR_BLACK)
+curses.init_pair(5, curses.COLOR_GREEN, curses.COLOR_BLACK)
+curses.init_pair(6, curses.COLOR_BLUE, curses.COLOR_BLACK)
 if len(sys.argv) == 3:
+    beginX = 0; beginY = 0
+    height = curses.LINES; width = curses.COLS
+    media = curses.newwin(height - 1, width - 1, beginY, beginX)
+    media.border(0, 0, 0, 0, 0, 0, 0, 0)
     vidfile = sys.argv[1]
     colored_output = int(sys.argv[2])
     read_media(vidfile, colored_output)
 else:
+    beginX = 0; beginY = 0
+    height = curses.LINES - 5; width = curses.COLS
+    media = curses.newwin(height, width, beginY, beginX)
+    media.border(0, 0, 0, 0, 0, 0, 0, 0)
+    beginX = 0; beginY = curses.LINES - 5
+    height = 5; width = curses.COLS
+    captions = curses.newwin(height, width, beginY, beginX)
+    captions.border(0, 0, 0, 0, 0, 0, 0, 0)
     vidfile = sys.argv[1]
     subfile = sys.argv[2]
     colored_output = int(sys.argv[3])
     read_media_sub(vidfile, subfile, colored_output)
+
+media.getch()
+curses.nocbreak()
+curses.echo()
+curses.endwin()
