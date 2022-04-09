@@ -8,7 +8,7 @@ import curses
 
 ASCII_CHAR_ARRAY = (" .:-=+*#%@", " .,:ilwW", " ▏▁░▂▖▃▍▐▒▀▞▚▌▅▆▊▓▇▉█", " `^|1aUBN", " .`!?xyWN")
 
-ASCII_CHARS = ASCII_CHAR_ARRAY[0]
+ASCII_CHARS = ASCII_CHAR_ARRAY[2]
 MAX_PIXEL_VALUE = 255
 
 def vid_render(st_matrix, st, ed, option):
