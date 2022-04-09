@@ -1,6 +1,6 @@
 import sys
 from PIL import Image
-import numpy
+import numpy as np
 import time
 import cv2
 import pysrt
@@ -47,7 +47,7 @@ def subtitle_show(subs, tstamp_ms):
 
 def get_pixel_matrix(image):
     """Function to get image from the media file and change its dimensions to fit the terminal, then turning it into pixel matrix."""
-    image = image.convert("RGB")
+    image = image.convert("HSV")
             
     # current row and column size definitions
     ac_row, ac_col = image.size
@@ -67,9 +67,7 @@ def get_color_matrix(pixels):
     for row in pixels:
         color_matrix_row = []
         for p in row:
-            r = round(p[0]/255)
-            g = round(p[1]/255)
-            b = round(p[2]/255)
+            clr = p[0]
             cNum = 0
             if r + g + b != 3:
                 if r == 1 and g == 1:
@@ -192,6 +190,17 @@ curses.init_pair(3, curses.COLOR_CYAN, curses.COLOR_BLACK)
 curses.init_pair(4, curses.COLOR_RED, curses.COLOR_BLACK)
 curses.init_pair(5, curses.COLOR_GREEN, curses.COLOR_BLACK)
 curses.init_pair(6, curses.COLOR_BLUE, curses.COLOR_BLACK)
+
+# defining hsv color limits
+# somewhat magic numbers, obtained by opening a color palette and observing the hue at which a color can be described as green
+# same procedure for all numbers
+gLowerHue = 85
+gUpperHue = 160
+rLowerHue = 340
+rUpperHue = 16
+bLowerHue = 215
+bUpperHue = 255
+
 if len(sys.argv) == 3:
     beginX = 0; beginY = 0
     height = curses.LINES; width = curses.COLS
