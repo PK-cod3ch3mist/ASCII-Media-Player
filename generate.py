@@ -8,7 +8,7 @@ import curses
 
 ASCII_CHAR_ARRAY = (" .:-=+*#%@", " .,:ilwW", " ▏▁░▂▖▃▍▐▒▀▞▚▌▅▆▊▓▇▉█", " `^|1aUBN", " .`!?xyWN")
 
-ASCII_CHARS = ASCII_CHAR_ARRAY[2]
+ASCII_CHARS = ASCII_CHAR_ARRAY[0]
 MAX_PIXEL_VALUE = 255
 
 def vid_render(st_matrix, st, ed, option):
@@ -67,21 +67,23 @@ def get_color_matrix(pixels):
     for row in pixels:
         color_matrix_row = []
         for p in row:
-            clr = p[0]
+            # Convert values to percentages and normalize
+            hue = (p[0] / 255) * 179
+            sat = (p[1] / 255) * 100
             cNum = 0
-            if r + g + b != 3:
-                if r == 1 and g == 1:
-                    cNum = 1
-                elif r == 1 and b == 1:
-                    cNum = 2
-                elif g == 1 and b == 1:
-                    cNum = 3
-                elif r == 1:
+            if sat >= 30:
+                if (0 <= hue and hue < rUpperHue) or (hue <= 180 and hue > rLowerHue):
                     cNum = 4
-                elif g == 1:
+                if hue <= gUpperHue and hue > gLowerHue:
                     cNum = 5
-                elif b == 1:
+                if hue <= gLowerHue and hue > rUpperHue:
+                    cNum = 1
+                if hue <= bUpperHue and hue > bLowerHue:
                     cNum = 6
+                if hue <= bLowerHue and hue > gUpperHue:
+                    cNum = 3
+                if hue <= rLowerHue and hue > bUpperHue:
+                    cNum = 2
             color_matrix_row.append(cNum)
         color_matrix.append(color_matrix_row)
     return color_matrix
@@ -96,14 +98,15 @@ def get_intensity_matrix(pixels, option):
         intensity_matrix_row = []
         for p in row:
             intensity = 0
-            if option == 1:
-                intensity = ((p[0] + p[1] + p[2]) / 3.0)
-            elif option == 2:
-                intensity = (max(p[0], p[1], p[2]) + min(p[0], p[1], p[2])) / 2
-            elif option == 3:
-                intensity = (0.299 * p[0] * p[0] + 0.587 * p[1] * p[1] + 0.114 * p[2] * p[2]) ** 0.5
-            else:
-                raise Exception("Unrecognised intensity option: %d" % option)
+            intensity = p[2]
+            # if option == 1:
+            #     intensity = ((p[0] + p[1] + p[2]) / 3.0)
+            # elif option == 2:
+            #     intensity = (max(p[0], p[1], p[2]) + min(p[0], p[1], p[2])) / 2
+            # elif option == 3:
+            #     intensity = (0.299 * p[0] * p[0] + 0.587 * p[1] * p[1] + 0.114 * p[2] * p[2]) ** 0.5
+            # else:
+            #     raise Exception("Unrecognised intensity option: %d" % option)
             intensity_matrix_row.append(intensity)
         intensity_matrix.append(intensity_matrix_row)
 
@@ -194,12 +197,12 @@ curses.init_pair(6, curses.COLOR_BLUE, curses.COLOR_BLACK)
 # defining hsv color limits
 # somewhat magic numbers, obtained by opening a color palette and observing the hue at which a color can be described as green
 # same procedure for all numbers
-gLowerHue = 85
-gUpperHue = 160
-rLowerHue = 340
-rUpperHue = 16
-bLowerHue = 215
-bUpperHue = 255
+gLowerHue = 36
+gUpperHue = 80
+rLowerHue = 159
+rUpperHue = 14
+bLowerHue = 104
+bUpperHue = 138
 
 if len(sys.argv) == 3:
     beginX = 0; beginY = 0
