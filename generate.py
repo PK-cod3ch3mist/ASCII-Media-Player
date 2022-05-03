@@ -1,8 +1,7 @@
 import sys
 from PIL import Image
-import numpy as np
 import time
-import cv2
+from cv2 import cv2
 import pysrt
 import curses
 
@@ -15,7 +14,7 @@ def vid_render(st_matrix, st, ed, option):
     media.addstr(0, 1, "Video Playback")
     pixels = [st_matrix[i][:] for i in range (st, ed)]
     # CONFIG OPTION - intensity measure
-    intensity_matrix = get_intensity_matrix(pixels, 3)
+    intensity_matrix = get_intensity_matrix(pixels)
     intensity_matrix = normalize_intensity_matrix(intensity_matrix)
     color_matrix = get_color_matrix(pixels)
 
@@ -88,7 +87,7 @@ def get_color_matrix(pixels):
         color_matrix.append(color_matrix_row)
     return color_matrix
 
-def get_intensity_matrix(pixels, option):
+def get_intensity_matrix(pixels):
     """Function to set the measure of brightness to be used depending upon the
     option, choose between three measures namely luminance,
     lightness and average pixel values
