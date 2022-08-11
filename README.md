@@ -3,11 +3,13 @@
 A python program that creates ASCII graphics from images and videos. It can also play videos with subtitle support (given a .srt file)! :scream:
 
 # 🍎 Motivation
+
 You have seen Music Players, Stackoverflow surfers, Hacker News portals etc. in the terminal, so it is the logical next step 😅. Besides, the terminal makes almost everything appear x10 times more cool.
 
 # ⚗️ Dependencies
 
 ## Language and Packages
+
 The program runs using python3
 The following python packages are used in the program:
 - pysrt
@@ -26,6 +28,7 @@ All POSIX compliant terminals should work well. If you use windows, and the prog
 https://user-images.githubusercontent.com/55488899/161427699-1d606858-4a3d-4490-b21e-ecd4ac56a83b.mp4
 
 # 🛠️ Usage
+
 Navigate to the directory of the python script and run the following command
 ```shell
 python generate.py $VIDEO_FILENAME $SUBTITLE_FILENAME $OPTION
@@ -37,6 +40,7 @@ python generate.py $VIDEO_FILENAME $OPTION
 Here `$VIDEO_FILENAME` and `$SUBTITLE_FILENAME` are the full path to the files and `$OPTION` takes values **0 for black and white output** and **1 for true color output** (see if your terminal supports true color before enabling)
 
 # 📝 TODO and Future Plans
+
 - [x] Support 3-bit RGB (8-colors)
 - [x] Support true color (24-bit RGB) *visit tc-version branch*
 - [ ] Support automatic resizing
