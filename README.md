@@ -12,6 +12,7 @@ You have seen Music Players, Stackoverflow surfers, Hacker News portals etc. in 
 
 The program runs using python3
 The following python packages are used in the program:
+
 - pysrt
 - opencv-python
 - Pillow
