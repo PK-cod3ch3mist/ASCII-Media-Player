@@ -1,11 +1,11 @@
 # Contribution guidelines
+
 Thank you for showing your interest in the repository and the idea. I am grateful to be working with fellow developers.
 
 ## Raising Issues
-*Issues may be raised only upon problems raised while using the main and tc-version branches.* 
 
-Note that alpha branch code is highly unstable and is expected to break, kindly do not raise issues regarding it.
 When raising an issue, try your best to include the following information:
+
 - Which branch were you using when things broke?
 - What was your input?
 - What was the throwback/error message received, if any?
@@ -16,6 +16,7 @@ When raising an issue, try your best to include the following information:
 If some infromation is not available to you, you should mention that too.
 
 ## Responding to issues
+
 *When contributing, you can contribute to any branch.
 The issues page will give you a list of issues you can resolve in the main branch.*
 
