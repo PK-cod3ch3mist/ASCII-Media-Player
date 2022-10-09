@@ -7,7 +7,7 @@ import curses
 import numpy as np
 
 class AMP():
-    def __init__(self, chars_id=3, rLH=159, rUH=14, gLH=36, gUH=80, bLH=104, bUH=138):   
+    def __init__(self, chars_id=0, rLH=159, rUH=14, gLH=36, gUH=80, bLH=104, bUH=138):   
         ASCII_CHAR_ARRAY = (" .:-=+*#%@", " .,:ilwW", " ▏▁░▂▖▃▍▐▒▀▞▚▌▅▆▊▓▇▉█", " `^|1aUBN", " .`!?xyWN")
         
         self.ASCII_CHARS = ASCII_CHAR_ARRAY[chars_id]
@@ -28,6 +28,9 @@ class AMP():
         self.rUpperHue = rUH
         self.bLowerHue = bLH
         self.bUpperHue = bUH
+
+        self.SPACEBAR_KEY = (32,)
+        self.QUIT_KEYS = (113,81)
 
 
     def vid_render(self, pixels, coloring = True):
@@ -53,9 +56,11 @@ class AMP():
 
     def subtitle_show(self, subs, tstamp_ms):
         """Function to get subtitles of current frame and display them"""
-        self.captions.clear()
-        self.captions.border(' ', ' ', 0, 0, ' ', ' ', ' ', ' ')
         parts = subs.slice(starts_before={'milliseconds': int(tstamp_ms)}, ends_after={'milliseconds': int(tstamp_ms)})
+        if parts:
+            self.captions.clear()
+            self.captions.border(' ', ' ', 0, 0, ' ', ' ', ' ', ' ')
+
         self.captions.addstr(0, 1, "Captions")
         self.captions.move(1, 0)
         for part in parts:
@@ -78,8 +83,6 @@ class AMP():
         # set image to determined d1 and column size
         im = image.resize((d1, d2))
         pixels = np.reshape(im.getdata(), (d2, d1, 3))
-        with open('error.txt', 'a') as f:
-            print(pixels.shape, file=f)
         return pixels
 
 
@@ -138,10 +141,27 @@ class AMP():
         vidcap = cv2.VideoCapture(vidfile)
         if subfile: subs = pysrt.open(subfile,encoding='latin-1')
         fps = vidcap.get(cv2.CAP_PROP_FPS)
+
+        self.media.nodelay(True)
+        
+        user_input = curses.ERR
+
         while vidcap.isOpened():
-            # read frames from the image
+            # Read frames from the image
             success, image = vidcap.read()
             if not success: break
+
+            # Check for user input
+            user_input = self.media.getch()
+
+            if user_input in self.SPACEBAR_KEY:
+                user_input = self.media.getch()
+                while user_input == curses.ERR:
+                    user_input = self.media.getch()
+
+            if user_input in self.QUIT_KEYS: break
+
+            # Process a frame
             dur = time.process_time()
             cv2.imwrite("./data/frame.jpg", image)
             self.print_from_image("./data/frame.jpg", coloring)
@@ -150,6 +170,9 @@ class AMP():
             if (round(1000/fps - dur) >= 0): curses.napms(round(1000/fps - dur))
         vidcap.release()
         cv2.destroyAllWindows()
+
+        self.media.nodelay(False)
+        return user_input
 
 
     def main(self, argv):
@@ -171,9 +194,10 @@ class AMP():
             self.captions.border(0, 0, 0, 0, 0, 0, 0, 0)
             subfile = argv[2]
 
-        self.read_media_sub(vidfile,colored_output,subfile)
+        return_val = self.read_media_sub(vidfile,colored_output,subfile)
 
-        self.media.getch()
+        if (return_val not in self.QUIT_KEYS):
+            self.media.getch()
 
 def run(stdscr):
     obj = AMP()
