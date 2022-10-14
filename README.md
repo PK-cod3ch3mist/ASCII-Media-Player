@@ -1,4 +1,4 @@
-<a href="./assets/AMP.png" alt="ASCII Media Player" width="1000"></a>
+<p align="center"><a href="https://github.com/PK-cod3ch3mist/ANSIArtGenerator"><img src="./assets/AMP.png" alt="ASCII Media Player" width="50%"></a></p>
 
 A python program that creates ASCII graphics from images and videos. It can also play videos with subtitle support (given a .srt file)! :scream:
 
