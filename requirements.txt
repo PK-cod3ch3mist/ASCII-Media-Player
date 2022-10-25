@@ -1,5 +1,5 @@
 numpy==1.21.2
-Pillow==8.3.2
+scipy
 opencv-python==4.5.4.58
 pysrt==1.1.2
 curses
