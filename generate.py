@@ -39,21 +39,29 @@ class AMP:
         self.SPACEBAR_KEY = (32,)
         self.QUIT_KEYS = (113, 81)
 
-    def vid_render(self, pixels, coloring=True):
+    def vid_render(self, pixels, coloring=True, edgeOnly=False):
         """Function to merge and render the ASCII output to the terminal.
         @param pixels - Pixel matrix of an image
         @param coloring - Option to switch between color and bnw output.
         """
         self.media.addstr(0, 1, "Video Playback")
         intensity_matrix = pixels[:, :, 2]
-        sharp_matrix = self.get_edge_matrix(intensity_matrix)
-        sharp_matrix = self.normalize_intensity_matrix(sharp_matrix)
+        if edgeOnly:
+            sharp_matrix = self.get_edge_matrix(intensity_matrix)
+            np.clip(sharp_matrix, 0, 255, sharp_matrix)
+        else:
+            sharp_matrix = intensity_matrix - self.normalize_intensity_matrix(
+                self.get_edge_matrix(intensity_matrix)
+            )
+            sharp_matrix = self.normalize_intensity_matrix(sharp_matrix)
         color_matrix = self.get_color_matrix(pixels)
 
         for i in range(len(sharp_matrix)):
             offset = 1
             for j in range(len(sharp_matrix[0])):
-                symbol_index = int(sharp_matrix[i][j] / self.MAX_PIXEL_VALUE * len(self.ASCII_CHARS)) - 1
+                symbol_index = (
+                    int(sharp_matrix[i][j] / self.MAX_PIXEL_VALUE * len(self.ASCII_CHARS)) - 1
+                )
                 symbol_index += int(symbol_index < 0)
                 asciiStr = self.ASCII_CHARS[symbol_index] * 3
                 self.media.addstr(
@@ -70,10 +78,8 @@ class AMP:
         """Function to get the edges of the current frame for display"""
         laplace_op = np.array([[1.0, 1.0, 1.0], [1.0, -8.0, 1.0], [1.0, 1.0, 1.0]])
 
-        laplace_out = self.normalize_intensity_matrix(
-            signal.convolve2d(img, laplace_op, "same")
-        )
-        return img - laplace_out
+        laplace_out = signal.convolve2d(img, laplace_op, "same")
+        return laplace_out
 
     def subtitle_show(self, subs, tstamp_ms):
         """Function to get subtitles of current frame and display them"""
@@ -145,7 +151,7 @@ class AMP:
             )
         return intensity_matrix
 
-    def print_from_image(self, image, coloring):
+    def print_from_image(self, image, mode):
         """Function to take in an image & use its RGB values to decide upon an ASCII character
         to represent it. This ASCII character will be based upon the brightness
         measure calculated
@@ -153,9 +159,9 @@ class AMP:
         Manager function.
         """
         pixels = self.get_pixel_matrix(image)
-        self.vid_render(pixels, coloring)
+        self.vid_render(pixels, mode == 1, mode == 2)
 
-    def read_media_sub(self, vidfile, coloring, subfile=""):
+    def read_media_sub(self, vidfile, mode, subfile=""):
         """Function to read the self.media file and pass on data to rendering functions frame by frame."""
         vidcap = cv.VideoCapture(vidfile)
         if subfile:
@@ -185,7 +191,7 @@ class AMP:
 
             # Process a frame
             dur = time.process_time()
-            self.print_from_image(image, coloring)
+            self.print_from_image(image, mode)
             if subfile:
                 self.subtitle_show(subs, vidcap.get(cv.CAP_PROP_POS_MSEC))
             dur = (time.process_time() - dur) * 1000
@@ -201,7 +207,7 @@ class AMP:
         beginX = 0
         beginY = 0
         vidfile = argv[1]
-        colored_output = int(argv[-1])
+        output_mode = int(argv[-1])
 
         if len(argv) == 3:
             height = curses.LINES
@@ -224,7 +230,7 @@ class AMP:
             self.captions.border(0, 0, 0, 0, 0, 0, 0, 0)
             subfile = argv[2]
 
-        return_val = self.read_media_sub(vidfile, colored_output, subfile)
+        return_val = self.read_media_sub(vidfile, output_mode, subfile)
 
         if return_val not in self.QUIT_KEYS:
             self.media.getch()
