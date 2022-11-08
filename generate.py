@@ -1,11 +1,14 @@
 import sys
 import time
-from cv2 import cv2 as cv
+import cv2 as cv
 import pysrt
 import curses
 import numpy as np
 from scipy import signal
+import os
 
+startSize = os.get_terminal_size()
+startSize2 = os.get_terminal_size()
 
 class AMP:
     def __init__(self, chars_id=3, rLH=159, rUH=14, gLH=36, gUH=80, bLH=104, bUH=138):
@@ -191,9 +194,46 @@ class AMP:
 
             # Process a frame
             dur = time.process_time()
-            self.print_from_image(image, mode)
-            if subfile:
+            
+            #using global and local variables to check if terminal size changed
+            global startSize
+            global startSize2
+            
+            currentSize=os.get_terminal_size() 
+            currentSize2=os.get_terminal_size() 
+
+            #print and update subs
+            if(startSize2 == currentSize2 and subfile !=''):
                 self.subtitle_show(subs, vidcap.get(cv.CAP_PROP_POS_MSEC))
+            elif( subfile !='' ):
+                curses.update_lines_cols()
+                beginX = 0
+                beginY = curses.LINES - 5
+                height = 5
+                width = curses.COLS
+                self.captions = curses.newwin(height, width, beginY, beginX)
+                self.captions.border(0, 0, 0, 0, 0, 0, 0, 0)
+                self.subtitle_show(subs, vidcap.get(cv.CAP_PROP_POS_MSEC))
+                startSize2=currentSize2    
+
+            #play and update video resolution
+            if(startSize == currentSize):
+                self.print_from_image(image, mode)
+            else:
+                curses.update_lines_cols()
+                if (subfile !=''):
+                    height = curses.LINES - 5
+                    width = curses.COLS
+                else:
+                    height = curses.LINES 
+                    width = curses.COLS 
+                self.media.clear()
+                self.media.resize(height, width)
+                self.media.border(0, 0, 0, 0, 0, 0, 0, 0) 
+                startSize=currentSize     
+
+
+            
             dur = (time.process_time() - dur) * 1000
             if round(1000 / fps - dur) >= 0:
                 curses.napms(round(1000 / fps - dur))
@@ -208,6 +248,9 @@ class AMP:
         beginY = 0
         vidfile = argv[1]
         output_mode = int(argv[-1])
+
+        #disables cursor
+        curses.curs_set(False)
 
         if len(argv) == 3:
             height = curses.LINES
