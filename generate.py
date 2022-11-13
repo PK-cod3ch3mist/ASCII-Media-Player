@@ -1,6 +1,6 @@
 import sys
 import time
-import cv2 as cv
+from cv2 import cv2 as cv
 import pysrt
 import curses
 import numpy as np
@@ -104,7 +104,6 @@ class AMP:
     def get_pixel_matrix(self, image):
         """Function to get image from the self.media file and change its dimensions to fit the terminal, then turning it into pixel matrix."""
         image = cv.cvtColor(image, cv.COLOR_BGR2HSV)
-        # image[:,:,2] = cv.equalizeHist(image[:,:,2])
 
         # current row and column size definitions
         ac_col, ac_row = image.shape[:2]
@@ -115,6 +114,7 @@ class AMP:
 
         # set image to determined d1 and column size
         im = cv.resize(image, (d1, d2), interpolation=cv.INTER_AREA)
+        # image[:,:,2] = cv.equalizeHist(image[:,:,2])
         pixels = np.reshape(im, (d2, d1, 3))
         return pixels
 
