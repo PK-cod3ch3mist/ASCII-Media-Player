@@ -44,6 +44,6 @@ Here `$VIDEO_FILENAME` and `$SUBTITLE_FILENAME` are the full path to the files a
 
 - [x] Support 3-bit RGB (8-colors)
 - [x] Support true color (24-bit RGB) *visit tc-version branch*
-- [ ] Support automatic resizing
+- [x] Support automatic resizing
 - [x] Support B&W output
 - [x] Support subtitles
