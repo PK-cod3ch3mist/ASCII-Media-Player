@@ -29,8 +29,8 @@ class AMP:
         curses.init_pair(5, curses.COLOR_GREEN, curses.COLOR_BLACK)
         curses.init_pair(6, curses.COLOR_BLUE, curses.COLOR_BLACK)
 
-        # defining hsv color limits
-        # somewhat magic numbers, obtained by opening a color palette and observing the hue at which a color can be described as green
+        # defining hsv colour limits
+        # somewhat magic numbers, obtained by opening a colour palette and observing the hue at which a colour can be described as green
         # same procedure for all numbers
         self.gLowerHue = gLH
         self.gUpperHue = gUH
@@ -47,7 +47,7 @@ class AMP:
 
         pixels - Pixel matrix of an image
         
-        coloring - Option to switch between color and bnw output.
+        colouring - Option to switch between colour and bnw output.
         """
         self.media.addstr(0, 1, "Video Playback")
         intensity_matrix = pixels[:, :, 2]
@@ -126,7 +126,7 @@ class AMP:
         for row in pixels:
             color_matrix_row = []
             for p in row:
-                # Convert values to percentages and normalize
+                # Convert values to percentages and normalise
                 hue = p[0]
                 sat = (p[1] / 255) * 100
                 cNum = 0

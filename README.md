@@ -4,7 +4,7 @@ A python program that creates ASCII graphics from images and videos. It can also
 
 # 🍎 Motivation
 
-You have seen Music Players, Stackoverflow surfers, Hacker News portals etc. in the terminal, so it is the logical next step 😅. Besides, the terminal makes almost everything appear x10 times more cool.
+You have seen Music Players, Stack-overflow surfers, Hacker News portals etc. in the terminal, so it is the logical next step 😅. Besides, the terminal makes almost everything appear x10 times more cool.
 
 # ⚗️ Dependencies
 
@@ -38,12 +38,12 @@ If you want to run without subtitles then
 ```shell
 python generate.py $VIDEO_FILENAME $OPTION
 ```
-Here `$VIDEO_FILENAME` and `$SUBTITLE_FILENAME` are the full path to the files and `$OPTION` takes values **0 for black and white output** and **1 for true color output** (see if your terminal supports true color before enabling)
+Here `$VIDEO_FILENAME` and `$SUBTITLE_FILENAME` are the full path to the files and `$OPTION` takes values **0 for black and white output** and **1 for true colour output** (see if your terminal supports true colour before enabling)
 
 # 📝 TODO and Future Plans
 
-- [x] Support 3-bit RGB (8-colors)
-- [x] Support true color (24-bit RGB) *visit tc-version branch*
+- [x] Support 3-bit RGB (8-colours)
+- [x] Support true colour (24-bit RGB) *visit tc-version branch*
 - [x] Support automatic resizing
 - [x] Support B&W output
 - [x] Support subtitles

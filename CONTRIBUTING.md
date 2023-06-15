@@ -13,7 +13,7 @@ When raising an issue, try your best to include the following information:
 - Was the problem in video rendering/subtitle display/video controls?
 - What was the expected output?
 
-If some infromation is not available to you, you should mention that too.
+If some information is not available to you, you should mention that too.
 
 ## Responding to issues
 
