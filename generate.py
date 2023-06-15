@@ -1,6 +1,6 @@
 import sys
 import time
-from cv2 import cv2 as cv
+import cv2 as cv
 import pysrt
 import curses
 import numpy as np
@@ -44,8 +44,10 @@ class AMP:
 
     def vid_render(self, pixels, coloring=True, edgeOnly=False):
         """Function to merge and render the ASCII output to the terminal.
-        @param pixels - Pixel matrix of an image
-        @param coloring - Option to switch between color and bnw output.
+
+        pixels - Pixel matrix of an image
+        
+        coloring - Option to switch between color and bnw output.
         """
         self.media.addstr(0, 1, "Video Playback")
         intensity_matrix = pixels[:, :, 2]
